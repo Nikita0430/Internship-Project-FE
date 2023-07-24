@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+* {
+  list-style: none;
+  text-decoration: none;
+  font-family: sans-serif;
+}
+
+body {
+  background: #f5f6fa;
+}
+
+h1 {
+  color: #0077c2;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-size: x-large;
+  font-weight: 800;
+}
+
+.search-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  width: 60%;
+}
+
+.search-bar input[type="text"] {
+  width: 80%;
+  padding: 12px 20px;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.search-bar button {
+  background-color: #0077c2;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 0 10px;
+  width: 20%;
+  height: 48px;
+  font-size: 18px;
+}
+
+.search-bar button:hover {
+  background-color: #005ea6;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.button button {
+  background-color: #0077c2;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 0 5px;
+  height: 48px;
+  font-size: 18px;
+}
+
+.button button:hover {
+  background-color: #005ea6;
+}
+
+.clinic-table {
+  margin: 0 auto;
+  width: 80%;
+  border-collapse: collapse;
+}
+
+.clinic-table th {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.clinic-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.clinic-table a {
+  color: #00477f;
+}
+
+.pagination {
+  margin: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  background-color: #f2f2f2;
+  border: none;
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+.pagination button[disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.pagination .active {
+  background-color: #0077c2;
+  color: white;
+}
+
+.sort-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.sorting {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.sort-button {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  width: 1em;
+  height: 1em;
+}
+
+.sort-icon {
+  margin: 0 5px;
+}

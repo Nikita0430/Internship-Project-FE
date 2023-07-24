@@ -1,0 +1,172 @@
+<div class="back">
+    <a routerLink="/manage-order"><em class="fa fa-arrow-left"> </em> Back to Order List</a>
+</div>
+<div class="main-container">
+    <div *ngIf="orderDetails" class="order-info">
+        <h1>Order Details</h1>
+        <div class="order-details">
+            <div class="flex-column-1">
+                <div class="order-detail">
+                    <span class="order-detail-label">Account ID : </span>
+                    <span class="order-detail-value">{{ orderDetails?.account_id }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Clinic Name : </span>
+                    <span class="order-detail-value">{{ orderDetails?.clinic_name }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Address : </span>
+                    <span class="order-detail-value">{{ orderDetails?.address }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">City : </span>
+                    <span class="order-detail-value">{{ orderDetails?.city }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">State : </span>
+                    <span class="order-detail-value">{{ orderDetails?.state }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Email : </span>
+                    <span class="order-detail-value">{{ orderDetails?.email }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Phone no. : </span>
+                    <span class="order-detail-value">{{ orderDetails?.phone_no }}</span>
+                </div><br>
+                <div class="order-detail">
+                    <span class="order-detail-label">Dog Name : </span>
+                    <span class="order-detail-value">{{ orderDetails?.dog_name }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Dog Age : </span>
+                    <span class="order-detail-value">{{ orderDetails?.dog_age }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Dog Breed : </span>
+                    <span class="order-detail-value">{{ orderDetails?.dog_breed }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Dog Gender : </span>
+                    <span class="order-detail-value">{{ orderDetails?.dog_gender }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Dog Weight : </span>
+                    <span class="order-detail-value">{{ orderDetails?.dog_weight }}</span>
+                </div><br>
+                <div class="order-detail">
+                    <span class="order-detail-label">Reactor Name : </span>
+                    <span class="order-detail-value">{{ orderDetails?.reactor_name }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Reactor Cycle ID : </span>
+                    <span class="order-detail-value">{{ orderDetails?.reactor_cycle_id }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Dosage per Elbow : </span>
+                    <span class="order-detail-value">{{ orderDetails?.dosage_per_elbow }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">No. of Elbows : </span>
+                    <span class="order-detail-value">{{ orderDetails?.no_of_elbows }}</span>
+                </div>
+                <div class="order-detail">
+                    <span class="order-detail-label">Total Dosage : </span>
+                    <span class="order-detail-value">{{ orderDetails?.total_dosage }}</span>
+                </div>
+
+                <div class="order-detail">
+                    <span class="order-detail-label">Injection Date : </span>
+                    <span class="order-detail-value">{{ orderDetails?.injection_date }}</span>
+                </div>
+            </div>
+            <div class="flex-column-2">
+                <button *ngIf="cancelled" class="cancelled-btn">Cancelled</button>
+                <div class="view-progress-vertical">
+                    <div class="view-progress-step" [ngClass]="{'completed': currentStep >= 1}">
+                        <div class="step-number" [class.cancelled-step-number]="cancelled">1</div>
+                        <div class="view-progress-container">
+                            <div class="step-title">Pending</div>
+                            <div class="step-title" *ngIf="currentStep>=1">
+                                {{this.transformDateTime(orderDetails.placed_at)}}
+                            </div>
+                        </div>
+                        <div class="step-line" [ngClass]="{'completed': currentStep >= 2}"></div>
+                    </div>
+                    <div class="view-progress-step" [ngClass]="{'completed': currentStep >= 2}">
+                        <div class="step-number" [class.cancelled-step-number]="cancelled">2</div>
+                        <div class="view-progress-container">
+                            <div class="step-title">Confirmed</div>
+                            <div class="step-title" *ngIf="currentStep>=2">
+                                {{this.transformDateTime(orderDetails.confirmed_at)}}
+                            </div>
+                        </div>
+                        <div class="step-line" [ngClass]="{'completed': currentStep >= 3}"></div>
+                    </div>
+                    <div class="view-progress-step" [ngClass]="{'completed': currentStep >= 3}">
+                        <div class="step-number" [class.cancelled-step-number]="cancelled">3</div>
+                        <div class="view-progress-container">
+                            <div class="step-title">Shipped</div>
+                            <div class="step-title" *ngIf="currentStep>=3">
+                                {{this.transformDateTime(orderDetails.shipped_at)}}
+                            </div>
+                        </div>
+                        <div class="step-line" [ngClass]="{'completed': currentStep >= 4}"></div>
+                    </div>
+                    <div class="view-progress-step" [ngClass]="{'completed': currentStep >= 4}">
+                        <div class="step-number" [class.cancelled-step-number]="cancelled">4</div>
+                        <div class="view-progress-container">
+                            <div class="step-title">Out for Delivery</div>
+                            <div class="step-title" *ngIf="currentStep>=4">
+                                {{this.transformDateTime(orderDetails.out_for_delivery_at)}}
+                            </div>
+                        </div>
+                        <div class="step-line" [ngClass]="{'completed': currentStep >= 5}"></div>
+                    </div>
+                    <div class="view-progress-step" [ngClass]="{'completed': currentStep >= 5}">
+                        <div class="step-number" [class.cancelled-step-number]="cancelled">5</div>
+                        <div class="view-progress-container">
+                            <div class="step-title">Delivered</div>
+                            <div class="step-title" *ngIf="currentStep>=5">
+                                {{this.transformDateTime(orderDetails.delivered_at)}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button [routerLink]="'/update-order-status/'+orderId" id="editButton" class="btn btn-primary"
+                    *ngIf="authService.isAdmin()">Edit Status</button>
+            </div>
+        </div>
+
+    </div>
+    <div *ngIf="reactorCycleList=== []">
+        <p><strong>No reactor cycle available for this injection date</strong></p>
+    </div>
+    <div class="grid" *ngIf="reactorCycleList!== []">
+        <table class="reactor-cycle-table">
+            <caption>Reactor Cycles</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Select</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Cycle Name</th>
+                    <th scope="col">Mass</th>
+                    <th scope="col">Target Start Date</th>
+                    <th scope="col">Expiration Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reactorCycle of reactorCycleList">
+                    <td><input type="radio" [disabled]="true" [value]="reactorCycle.id" [(ngModel)]="reactorCycleID">
+                    </td>
+                    <td>{{ reactorCycle.id }}</td>
+                    <td>{{ reactorCycle.name }}</td>
+                    <td>{{ reactorCycle.mass }}</td>
+                    <td>{{ transformDate(reactorCycle.target_start_date) }}</td>
+                    <td>{{ transformDate(reactorCycle.expiration_date) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

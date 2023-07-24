@@ -1,0 +1,211 @@
+<div class="back">
+    <a routerLink="/calendar"><em class="fa fa-arrow-left"> </em> Back to Calendar</a>
+</div>
+
+<body>
+    <h1>Place Order</h1>
+    <div class="main-container">
+        <form [formGroup]="placeOrderForm" (ngSubmit)="onSubmit()">
+            <div class="container">
+                <div class="form-column-1">
+                    <div class="form-row">
+                        <label for="clinic">Clinic:</label>
+                        <div class="clinic-dropdown-container">
+                            <select id="clinic" name="clinic" *ngIf="authService.isAdmin()" formControlName="clinicName" (change)="clinicDetails()">
+                                <option value="" disabled selected hidden>Select a Clinic</option>
+                                <option *ngFor="let clinic of clinics" [value]="clinic">{{ clinic }}</option>
+                            </select>
+                            <input class="input-clinic" type="text" id="clinic" name="clinic"
+                                *ngIf="!authService.isAdmin()" [readonly]="!this.isAdmin" formControlName="clinicName"
+                                (blur)="clinicDetails()">
+                        </div>
+                        <div class="inline-error" *ngIf="!isClinicValid || isAttempted">
+                            <div *ngIf="isAttempted && placeOrderForm.get('clinicName')!.errors?.['required']">
+                                Clinic Name is Required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="account">Account No:</label>
+                        <input type="text" id="account" name="account" [readonly]="true" formControlName="account">
+                    </div>
+                    <div class="form-row">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" [readonly]="true" formControlName="address"
+                            [(ngModel)]="this.placeOrderForm.value.address">
+                    </div>
+                    <div class="form-row">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city" [readonly]="true" formControlName="city"
+                            [(ngModel)]="this.placeOrderForm.value.city">
+                    </div>
+                    <div class="form-row">
+                        <label for="state">State:</label>
+                        <input type="text" id="state" name="state" [readonly]="true" formControlName="state"
+                            [(ngModel)]="this.placeOrderForm.value.state">
+                    </div>
+                    <div class="form-row">
+                        <label for="zip">Zip Code:</label>
+                        <input type="text" id="zip" name="zip" [readonly]="true" formControlName="zipcode"
+                            [(ngModel)]="this.placeOrderForm.value.zipcode">
+                    </div>
+                    <div class="form-row">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" formControlName="email">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('email')!.invalid && (placeOrderForm.get('email')!.touched))">
+                            <div *ngIf="placeOrderForm.get('email')!.errors?.['required']">
+                                Email is required
+                            </div>
+                            <div *ngIf="placeOrderForm.get('email')!.errors?.['email']">
+                                Enter a valid email address
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone" formControlName="phone">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('phone')!.invalid && (placeOrderForm.get('phone')!.touched))">
+                            <div *ngIf="placeOrderForm.get('phone')!.errors?.['required']">
+                                Phone number is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="orderdate">Order Date:</label>
+                        <input type="date" [readOnly]="true" id="orderdate" name="orderdate"
+                            formControlName="orderDate">
+                    </div>
+                </div>
+
+                <div class="form-column-2">
+                    <div class="form-row">
+                        <label for="shipdate">Ship Date:</label>
+                        <input type="date" [readOnly]="true" id="shipdate" name="shipdate"
+                            formControlName="shippingDate">
+                    </div>
+                    <div class="form-row">
+                        <label for="dogname">Number of Elbows:</label>
+                        <input type="text" id="numberOfElbow" name="numberOfElbow" (blur)="calculateTotalDosage()"
+                            formControlName="numberOfElbow">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('numberOfElbow')!.invalid && (placeOrderForm.get('numberOfElbow')!.touched))">
+                            <div *ngIf="placeOrderForm.get('numberOfElbow')!.errors?.['required']">
+                                Number of elbows is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="dosage">Dosage Per Elbow:</label>
+                        <input type="number" class="no-arrows" id="dosage" name="dosage" (blur)="calculateTotalDosage()"
+                            formControlName="dosagePerElbow">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('dosagePerElbow')!.invalid && (placeOrderForm.get('dosagePerElbow')!.touched))">
+                            <div *ngIf="placeOrderForm.get('dosagePerElbow')!.errors?.['required']">
+                                Dosage per elbow is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="totaldosage">Total Dosage:</label>
+                        <input type="number" class="no-arrows" id="totaldosage" [readOnly]="true" name="totaldosage"
+                            formControlName="totalDosage">
+                    </div>
+                    <div class="form-row">
+                        <label for="date">Injection Date:</label>
+                        <input type="date" id="date" [readOnly]="true" name="date" formControlName="injectionDate">
+                    </div>
+                    <div class="form-row">
+                        <label for="dogname">Dog's Name/Family Name:</label>
+                        <input type="text" id="dogname" name="dogname" formControlName="dogName">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('dogName')!.invalid && (placeOrderForm.get('dogName')!.touched))">
+                            <div *ngIf="placeOrderForm.get('dogName')!.errors?.['required']">
+                                Dog name is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="dogname">Dog's Breed:</label>
+                        <input type="text" id="breed" name="breed" formControlName="dogBreed">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('dogBreed')!.invalid && (placeOrderForm.get('dogBreed')!.touched))">
+                            <div *ngIf="placeOrderForm.get('dogBreed')!.errors?.['required']">
+                                Dog breed is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="dogname">Dog's Age:</label>
+                        <input type="number" id="age" class="no-arrows" name="age" formControlName="dogAge">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('dogAge')!.invalid && (placeOrderForm.get('dogAge')!.touched))">
+                            <div *ngIf="placeOrderForm.get('dogAge')!.errors?.['required']">
+                                Dog age is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="dogname">Dog's Weight:</label>
+                        <input type="number" id="weight" class="no-arrows" name="weight" formControlName="dogWeight">
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('dogWeight')!.invalid && (placeOrderForm.get('dogWeight')!.touched))">
+                            <div *ngIf="placeOrderForm.get('dogWeight')!.errors?.['required']">
+                                Dog Weight is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row gender-container">
+                        <label>Dog's Gender:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="dogGender" value="male" formControlName="dogGender">
+                                Male
+                            </label>
+                            <label>
+                                <input type="radio" name="dogGender" value="female" formControlName="dogGender">
+                                Female
+                            </label>
+                        </div>
+                        <div class="inline-error"
+                            *ngIf="this.isAttempted || (placeOrderForm.get('dogGender')!.invalid && (placeOrderForm.get('dogGender')!.touched))">
+                            <div *ngIf="placeOrderForm.get('dogGender')!.errors?.['required']">
+                                Dog Gender is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button type="submit">Place Order</button>
+            </div>
+        </form>
+        <div class="grid">
+            <table class="reactor-cycle-table">
+                <caption>Reactor Cycles</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Select</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cycle Name</th>
+                        <th scope="col">Mass</th>
+                        <th scope="col">Target Start Date</th>
+                        <th scope="col">Expiration Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let reactorCycle of reactorCycleList">
+                        <td><input type="radio" name="reactorCycle" [(ngModel)]="selectedReactorCycle"
+                                [value]="reactorCycle.id"></td>
+                        <td>{{ reactorCycle.id }}</td>
+                        <td>{{ reactorCycle.name }}</td>
+                        <td>{{ reactorCycle.mass }}</td>
+                        <td>{{ transformDate(reactorCycle.target_start_date) }}</td>
+                        <td>{{ transformDate(reactorCycle.expiration_date) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="login.component.css">
+
+<div class="body">
+   <div class="col-1">
+      <div class="logo">
+         <img class="logo-img" src="assets/webociti.png" alt="Couldn't load this image">
+      </div>
+      <div class="message">
+         <p>
+            Please login to the system to continue.
+         </p>
+      </div>
+   </div>
+
+   <div class="col-2">
+      <h1>Login</h1>
+      <form [formGroup]="LoginForm" (ngSubmit)="loginUser()" method="post">
+
+         <div class="txt_field">
+            <input type="email" formControlName="email">
+            <label>Email</label>
+            <div class="inline-error" *ngIf="this.isAttempted || (LoginForm.get('email')!.invalid && (LoginForm.get('email')!.touched))">
+               <div *ngIf="LoginForm.get('email')!.errors?.['required']">
+                  Email is required
+               </div>
+               <div *ngIf="LoginForm.get('email')!.errors?.['email']">
+                  Enter a valid email address
+               </div>
+            </div>
+         </div>
+
+         <div class="txt_field">
+            <input type="password" formControlName="password">
+            <label>Password</label>
+            <div class="inline-error" *ngIf="this.isAttempted || (LoginForm.get('password')!.invalid && (LoginForm.get('password')!.touched))">
+               <div *ngIf="LoginForm.get('password')!.errors?.['required']">
+                  Password is required
+               </div>
+            </div>
+         </div>
+
+         <div class="options">
+            <div class="remember-me">
+               <input type="checkbox" formControlName="rem_me">Remember me
+            </div>
+
+            <div class="forgot-password">
+               <a class="pass" routerLink="/forget-password">Forgot Password?</a>
+            </div>
+         </div>
+
+         <input type="submit" value="Login">
+
+      </form>
+   </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="back">
+  <a routerLink="/manage-reactor-cycle"><em class="fa fa-arrow-left"> </em> Back to Reactor Cycle List</a>
+</div>
+
+<div *ngIf="reactorCycleDetails" class="reactor-cycle-info">
+  <h1>Reactor Cycle Details</h1>
+  <div class="reactor-cycle-details">
+    <div class="reactor-cycle-detail">
+      <span class="reactor-cycle-detail-label">Cycle Name:</span>
+      <span class="reactor-cycle-detail-value">{{ reactorCycleDetails.cycle_name }}</span>
+    </div>
+    <div class="reactor-cycle-detail">
+      <span class="reactor-cycle-detail-label">Reactor Name:</span>
+      <span class="reactor-cycle-detail-value">{{ reactorCycleDetails.reactor_name }}</span>
+    </div>
+    <div class="reactor-cycle-detail">
+      <span class="reactor-cycle-detail-label">Mass:</span>
+      <span class="reactor-cycle-detail-value">{{ reactorCycleDetails.mass }}</span>
+    </div>
+    <div class="reactor-cycle-detail">
+      <span class="reactor-cycle-detail-label">Target Start Date:</span>
+      <span class="reactor-cycle-detail-value">{{ reactorCycleDetails.target_start_date }}</span>
+    </div>
+    <div class="reactor-cycle-detail">
+      <span class="reactor-cycle-detail-label">Expiration Date:</span>
+      <span class="reactor-cycle-detail-value">{{ reactorCycleDetails.expiration_date }}</span>
+    </div>
+  </div>
+
+  <div class="btn-container">
+    <input type="submit" (click)="updateReactorCycleDetails()" value="Update">
+    <input type="submit" (click)="deleteReactorCycle()" value="Delete">
+
+    <label class="switch">
+      <input type="checkbox" (checked)="reactorCycleDetails?.is_enabled" (click)="enable_disable()">
+      <span class="slider round"  [class.enabled]="reactorCycleDetails.is_enabled"></span>
+      <p *ngIf="!reactorCycleDetails.is_enabled">Disabled</p>
+      <p *ngIf="reactorCycleDetails.is_enabled">Enabled</p>
+    </label>
+  </div>
+</div>

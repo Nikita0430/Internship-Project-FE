@@ -1,0 +1,80 @@
+<div class="back">
+    <a [routerLink]="'/view-order/'+orderId"><em class="fa fa-arrow-left"> </em> Back to Order Details</a>
+</div>
+
+<div *ngIf="orderDetails" class="edit-order">
+    <h1>Update Order Status</h1>
+    <div class="container">
+        <div class="col-1">
+            <form [formGroup]="updateOrderForm" (ngSubmit)="onSubmit()">
+                <div class="form-item">
+                    <label for="status">Order Status:</label>
+                    <select name="status" formControlName="status">
+                        <option *ngFor="let key of statusMap.keys()" [value]="key"
+                            [disabled]="statusMap.get(key)?.index! <= statusMap.get(orderDetails.status)?.index! || statusMap.get(orderDetails.status)?.index===4">
+                            {{statusMap.get(key)?.title}}</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <button type="submit">Update Status</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-2">
+            <button *ngIf="cancelled" class="cancelled-btn">Cancelled</button>
+            <div class="progress-vertical">
+                <div class="progress-step" [ngClass]="{'completed': currentStep >= 1}">
+                    <div class="step-number" [class.cancelled-step-number]="cancelled">1</div>
+                    <div class="progress-container">
+                        <div class="step-title">Pending</div>
+                        <div class="step-title" *ngIf="currentStep>=1">
+                            {{this.transformDateTime(orderDetails.placed_at)}}
+                        </div>
+                    </div>
+                    <div class="step-line" [ngClass]="{'completed': currentStep >= 2}"></div>
+                </div>
+                <div class="progress-step" [ngClass]="{'completed': currentStep >= 2}">
+                    <div class="step-number" [class.cancelled-step-number]="cancelled">2</div>
+                    <div class="progress-container">
+                        <div class="step-title">Confirmed</div>
+                        <div class="step-title" *ngIf="currentStep>=2">
+                            {{this.transformDateTime(orderDetails.confirmed_at)}}
+                        </div>
+                    </div>
+                    <div class="step-line" [ngClass]="{'completed': currentStep >= 3}"></div>
+                </div>
+                <div class="progress-step" [ngClass]="{'completed': currentStep >= 3}">
+                    <div class="step-number" [class.cancelled-step-number]="cancelled">3</div>
+                    <div class="progress-container">
+                        <div class="step-title">Shipped</div>
+                        <div class="step-title" *ngIf="currentStep>=3">
+                            {{this.transformDateTime(orderDetails.shipped_at)}}
+                        </div>
+                    </div>
+                    <div class="step-line" [ngClass]="{'completed': currentStep >= 4}"></div>
+                </div>
+                <div class="progress-step" [ngClass]="{'completed': currentStep >= 4}">
+                    <div class="step-number" [class.cancelled-step-number]="cancelled">4</div>
+                    <div class="progress-container">
+                        <div class="step-title">Out for Delivery</div>
+                        <div class="step-title" *ngIf="currentStep>=4">
+                            {{this.transformDateTime(orderDetails.out_for_delivery_at)}}
+                        </div>
+                    </div>
+                    <div class="step-line" [ngClass]="{'completed': currentStep >= 5}"></div>
+                </div>
+                <div class="progress-step" [ngClass]="{'completed': currentStep >= 5}">
+                    <div class="step-number" [class.cancelled-step-number]="cancelled">5</div>
+                    <div class="progress-container">
+                        <div class="step-title">Delivered</div>
+                        <div class="step-title" *ngIf="currentStep>=5">
+                            {{this.transformDateTime(orderDetails.delivered_at)}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

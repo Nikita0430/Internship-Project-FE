@@ -1,0 +1,125 @@
+<h1>List of Orders</h1>
+
+<div class="search-container">
+    <div class="search-bar">
+        <input type="text" name="search" id="search" [formControl]="search">
+        <button (click)="getList()">Search</button>
+        <button (click)="resetList()">Reset</button>
+    </div>
+    <div *ngIf="authService.isAdmin()" class="status">
+        <select name="status" [formControl]="selectedStatus">
+            <option *ngFor="let stat of status" [value]="stat" [disabled]="isSelectionValid(stat)">{{stat | titlecase}}</option>
+        </select>
+        <button (click)="updateOrderStatus()">Update Status</button>
+    </div>
+    <div *ngIf="authService.isAdmin()" class="button">
+        <button (click)="download()">Export</button>
+    </div>
+</div>
+
+<table class="order-table">
+    <caption></caption>
+    <thead>
+        <tr>
+            <th scope="col" *ngIf="authService.isAdmin()"><button type="button" (click)="disSelectAll()" class="uncheck">Uncheck All</button></th>
+            <th scope="col">Order No.</th>
+            <th scope="col">
+                <div class="sort-container">
+                    <div class="sort-col">Clinic Name</div>
+                    <div class="sorting">
+                        <button type="button" class="sort-button" (click)="sortList('clinic_name', 'asc')">
+                            <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+                        </button>
+                        <button type="button" class="sort-button" (click)="sortList('clinic_name', 'desc')">
+                            <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+                        </button>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">Dog Name</th>
+            <th scope="col">Dog Breed</th>
+            <th scope="col">
+                <div class="sort-container">
+                    <div class="sort-col">Order Date</div>
+                    <div class="sorting">
+                        <button type="button" class="sort-button" (click)="sortList('placed_at', 'asc')">
+                            <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+                        </button>
+                        <button type="button" class="sort-button" (click)="sortList('placed_at', 'desc')">
+                            <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+                        </button>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">
+                <div class="sort-container">
+                    <div class="sort-col">Ship Date</div>
+                    <div class="sorting">
+                        <button type="button" class="sort-button" (click)="sortList('shipped_at', 'asc')">
+                            <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+                        </button>
+                        <button type="button" class="sort-button" (click)="sortList('shipped_at', 'desc')">
+                            <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+                        </button>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">
+                <div class="sort-container">
+                    <div class="sort-col">Dosage Per Elbow</div>
+                    <div class="sorting">
+                        <button type="button" class="sort-button" (click)="sortList('dosage_per_elbow', 'asc')">
+                            <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+                        </button>
+                        <button type="button" class="sort-button" (click)="sortList('dosage_per_elbow', 'desc')">
+                            <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+                        </button>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">
+                <div class="sort-container">
+                    <div class="sort-col">Total Dosage</div>
+                    <div class="sorting">
+                        <button type="button" class="sort-button" (click)="sortList('total_dosage', 'asc')">
+                            <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+                        </button>
+                        <button type="button" class="sort-button" (click)="sortList('total_dosage', 'desc')">
+                            <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+                        </button>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">Injection Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let order of orderList">
+            <td *ngIf="authService.isAdmin()"><input type="checkbox" [checked]="selectedOrders.includes(order['order_id'])" (change)="updateSelectedOrders(order['order_id'])" [disabled]="selectedOrders.length>=10 && !selectedOrders.includes(order['order_id'])"></td>
+            <td>
+                <a routerLink="/view-order/{{order['order_id']}}">{{ order['order_id'] }}</a>
+            </td>
+            <td>{{ order['clinic_name'] }}</td>
+            <td>{{ order['dog_name'] }}</td>
+            <td>{{ order['dog_breed'] }}</td>
+            <td>{{ transformDate(order['placed_at']) }}</td>
+            <td>{{ transformDate(order['shipped_at']) }}</td>
+            <td>{{ order['dosage_per_elbow'] }}</td>
+            <td>{{ order['total_dosage'] }}</td>
+            <td>{{ transformDate(order['injection_date']) }}</td>
+            <td>{{ order['status'] | titlecase }}</td>
+            <td>
+                <a routerLink="/view-order/{{order['order_id']}}">Click to Track</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="pagination">
+    <button *ngFor="let link of links" [disabled]="!link.url || link.active" (click)="goToPage(link.url)"
+        [ngClass]="{'active':(link.label==currentPage.toString())}">
+        <span [innerHTML]="link.label"></span>
+    </button>
+</div>

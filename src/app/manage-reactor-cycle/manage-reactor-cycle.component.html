@@ -1,0 +1,155 @@
+<h1>List of Reactor Cycles</h1>
+
+<div class="search-container">
+  <div class="search-bar">
+    <input type="text" name="name" id="name" [formControl]="name">
+    <button (click)="getList()">Search</button>
+    <button (click)="resetList()">Reset</button>
+  </div>
+
+  <div class="add-reactor-cycle-button">
+    <button (click)="openArchivedReactorCyclesPopup()">Archived Reactor Cycles</button>
+    <button routerLink="/reactor-cycle">Add Reactor Cycle</button>
+  </div>
+</div>
+
+<div class="overlay" *ngIf="showArchivedReactorCyclesPopup"></div>
+
+<div class="popup-container" *ngIf="showArchivedReactorCyclesPopup">
+  <h3>Archived Reactor Cycle</h3>
+  <button class="close-button" (click)="closePopup()">X</button>
+  <div class="search-container">
+    <div class="search-bar">
+      <input type="text" name="archivedName" id="archivedName" [formControl]="archivedName">
+      <button (click)="getArchivedList()">Search</button>
+      <button (click)="resetArchivedList()">Reset</button>
+    </div>
+  </div>
+  <table class="archived-reactor-cycle-table">
+    <caption></caption>
+    <thead>
+      <tr>
+        <th scope="col">Reactor Cycles</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reactorCycle of archivedReactorCycles">
+        <td>{{ reactorCycle.cycle_name + ', ' +  transformDate(reactorCycle.target_start_date) + ' - ' + transformDate(reactorCycle.expiration_date) }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Pagination buttons -->
+  <div class="pagination">
+    <button *ngFor="let link of archivedLinks" [disabled]="!link.url || link.active" (click)="goToArchivedPage(link.url)"
+      [ngClass]="{'active':(link.label==archivedCurrentPage.toString())}">
+      <span [innerHTML]="link.label"></span>
+    </button>
+  </div>
+</div>
+
+<table class="reactor-cycle-table">
+  <caption></caption>
+  <thead>
+    <tr>
+      <th scope="col">
+        <div class="sort-container">
+          <div class="sort-col">ID</div>
+          <div class="sorting">
+            <button type="button" class="sort-button" (click)="sortList('id', 'asc')">
+              <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+            </button>
+            <button type="button" class="sort-button" (click)="sortList('id', 'desc')">
+              <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+            </button>
+          </div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="sort-container">
+          <div class="sort-col">Cycle Name</div>
+          <div class="sorting">
+            <button type="button" class="sort-button" (click)="sortList('cycle_name', 'asc')">
+              <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+            </button>
+            <button type="button" class="sort-button" (click)="sortList('cycle_name', 'desc')">
+              <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+            </button>
+          </div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="sort-container">
+          <div class="sort-col">Reactor Name</div>
+          <div class="sorting">
+            <button type="button" class="sort-button" (click)="sortList('reactor_name', 'asc')">
+              <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+            </button>
+            <button type="button" class="sort-button" (click)="sortList('reactor_name', 'desc')">
+              <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+            </button>
+          </div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="sort-container">
+          <div class="sort-col">Mass</div>
+          <div class="sorting">
+            <button type="button" class="sort-button" (click)="sortList('mass', 'asc')">
+              <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+            </button>
+            <button type="button" class="sort-button" (click)="sortList('mass', 'desc')">
+              <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+            </button>
+          </div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="sort-container">
+          <div class="sort-col">Target Start Date</div>
+          <div class="sorting">
+            <button type="button" class="sort-button" (click)="sortList('target_start_date', 'asc')">
+              <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+            </button>
+            <button type="button" class="sort-button" (click)="sortList('target_start_date', 'desc')">
+              <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+            </button>
+          </div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="sort-container">
+          <div class="sort-col">Expiration Date</div>
+          <div class="sorting">
+            <button type="button" class="sort-button" (click)="sortList('expiration_date', 'asc')">
+              <em class="fa fa-thin fa-arrow-up-long sort-icon"></em>
+            </button>
+            <button type="button" class="sort-button" (click)="sortList('expiration_date', 'desc')">
+              <em class="fa fa-thin fa-arrow-down-long sort-icon"></em>
+            </button>
+          </div>
+        </div>
+      </th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reactorCycle of reactorCycles">
+      <td>
+        <a routerLink="/view-reactor-cycle/{{reactorCycle.id}}">{{ reactorCycle.id }}</a>
+      </td>
+      <td>{{ reactorCycle.cycle_name }}</td>
+      <td>{{ reactorCycle.reactor_name }}</td>
+      <td>{{ reactorCycle.mass }}</td>
+      <td>{{ transformDate(reactorCycle.target_start_date) }}</td>
+      <td>{{ transformDate(reactorCycle.expiration_date) }}</td>
+      <td>{{ reactorCycle.is_enabled? 'Enabled' : 'Disabled' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <button *ngFor="let link of links" [disabled]="!link.url || link.active" (click)="goToPage(link.url)"
+    [ngClass]="{'active':(link.label==currentPage.toString())}">
+    <span [innerHTML]="link.label"></span>
+  </button>
+</div>

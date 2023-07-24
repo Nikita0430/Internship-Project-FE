@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="reactor-cycle-form.component.css">
+
+<div class="back">
+  <a *ngIf="!this.reactorCycleId" routerLink="/manage-reactor-cycle"><em class="fa fa-arrow-left"> </em> Back to Reactor Cycle List</a>
+  <a *ngIf="this.reactorCycleId" [routerLink]="'/view-reactor-cycle/'+this.reactorCycleId"><em class="fa fa-arrow-left"> </em> Back to Reactor Cycle Details</a>
+</div>
+
+<h1 *ngIf="!reactorCycleId">Add Reactor Cycle</h1>
+<h1 *ngIf="reactorCycleId">Update Reactor Cycle</h1>
+
+<div class="container">
+  <form [formGroup]="reactorCycleForm" (ngSubmit)="onSubmit()" method="post">
+
+    <div class="form-group">
+      <label for="cycle_name">Cycle Name:</label>
+      <input type="text" class="form-control" id="cycle_name" formControlName="cycle_name" [(ngModel)]="this.reactorCycleDetails.cycle_name">
+      <div class="inline-error" *ngIf="isAttempted || (reactorCycleForm.controls['cycle_name'].invalid && (reactorCycleForm.controls['cycle_name'].touched))">
+        <div *ngIf="reactorCycleForm.get('cycle_name')!.errors?.['required']">Cycle Name is required</div>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="reactor_name">Reactor Name:</label>
+      <input type="text" class="form-control" id="reactor_name" formControlName="reactor_name" [(ngModel)]="this.reactorCycleDetails.reactor_name">
+      <div class="inline-error" *ngIf="isAttempted || (reactorCycleForm.controls['reactor_name'].invalid && (reactorCycleForm.controls['reactor_name'].touched))">
+        <div *ngIf="reactorCycleForm.get('reactor_name')!.errors?.['required']">Reactor Name is required</div>
+      </div>
+    </div>
+
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="mass">Mass:</label>
+        <input type="number" class="form-control" id="mass" formControlName="mass" [(ngModel)]="this.reactorCycleDetails.mass">
+        <div class="inline-error" *ngIf="isAttempted || (reactorCycleForm.controls['mass'].invalid && (reactorCycleForm.controls['mass'].touched))">
+            <div *ngIf="reactorCycleForm.get('mass')!.errors?.['required']">Mass is required</div>
+        </div>
+      </div>
+
+
+      <div class="form-group col-md-4">
+        <label for="target_start_date">Target Start Date:</label>
+        <input type="date" class="form-control" id="target_start_date" formControlName="target_start_date" [min]="today" [(ngModel)]="this.reactorCycleDetails.target_start_date">
+        <div class="inline-error" *ngIf="isAttempted || (reactorCycleForm.controls['target_start_date'].invalid && (reactorCycleForm.controls['target_start_date'].touched))">
+            <div *ngIf="reactorCycleForm.get('target_start_date')!.errors?.['required']">Target Start Date is required</div>
+        </div>
+      </div>
+
+
+      <div class="form-group col-md-2">
+        <label for="expiration_date">Expiration Date:</label>
+        <input type="date" class="form-control" id="expiration_date" formControlName="expiration_date" [min]="today" [(ngModel)]="this.reactorCycleDetails.expiration_date">
+        <div class="inline-error" *ngIf="isAttempted || (reactorCycleForm.controls['expiration_date'].invalid && (reactorCycleForm.controls['expiration_date'].touched))">
+            <div *ngIf="reactorCycleForm.get('expiration_date')!.errors?.['required']">Expiration Date is required</div>
+        </div>
+        <div class="inline-error" *ngIf="reactorCycleForm.errors?.['startDateBeforeExpirationDate']">Expiration date should be greater than target start date</div>
+      </div>
+
+    </div>
+
+    <div class="secondary-btn-container">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>

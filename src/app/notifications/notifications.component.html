@@ -1,0 +1,21 @@
+<button class="button" *ngIf="!authService.isAdmin()" (click)="openNotification()">
+  <em class="fa fa-bell"></em><span class="notification-dropdown__count">{{ unreadCount }}</span>
+</button>
+<div *ngIf="isVisible" class="notification-dropdown">
+  <div class="notification-dropdown__menu">
+    <div class="notification-dropdown__header">
+      <h6 class="notification-dropdown__main-title">Notifications</h6>
+    </div>
+    <ul>
+      <li *ngIf="notifications.length === 0" class="notification-not-found">No Notifications Found</li>
+      <li *ngFor="let notification of notifications" class="notification-dropdown__item">
+        <a class="content">
+          <div class="notification-dropdown__content" (click)="navigateToOrderDetails(notification.order_id)">
+            <p  class="notification-dropdown__title">Order {{ notification.status_change | titlecase }}</p>
+            <p class="notification-dropdown__text">Your order no.{{ notification.order_id }} is {{ notification.status_change }}</p>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

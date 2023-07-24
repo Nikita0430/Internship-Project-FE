@@ -1,0 +1,50 @@
+version: 0.2
+environment_variables:
+  plaintext:
+     S3_BUCKET: "app.dev.webociti.growexx.com"
+     CONFIG_BUCKET_NAME: "s3-interns-project-artifacts"
+     DISTRIBUTION_ID: "E392XQW69ZCR4E"
+     projectKey: "webociti_interns_2023_fe"
+     projectVersion: "master"
+     projectName: "webociti_interns_2023_fe"
+env:
+  parameter-store:
+#    GITHUB_TOKEN: 'GITHUB_TOKEN'
+    SONAR_TOKEN: 'WEBOCITI_SONAR_TOKEN'
+    SONAR_HOST: 'SONAR_HOST'
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18.x
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install -g @angular/cli@latest
+      - aws s3 cp s3://$CONFIG_BUCKET_NAME/webociti-usw1-angula/config-ui/environment.ts /src/environments/.
+      - npm install --legacy-peer-deps
+      - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+      - echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+      - apt-get update && apt-get install -y google-chrome-stable
+  build:
+    commands:
+      - echo Build started on `date`
+      - curl ifconfig.co
+      - echo testing started
+      - npm run test 
+      - ng build
+      - wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip
+      - unzip sonar-scanner-cli-3.2.0.1227-linux.zip
+      - aws s3 cp s3://$CONFIG_BUCKET_NAME/webociti-fe-artifacts/config/sonar-scanner.properties sonar-scanner-3.2.0.1227-linux/conf/sonar-scanner.properties
+      - ./sonar-scanner-3.2.0.1227-linux/bin/sonar-scanner -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=$projectKey -Dsonar.projectVersion=$projectVersion
+  post_build:
+    commands:
+      - pwd
+      - ls -ltr
+      - aws s3 rm s3://${S3_BUCKET} --recursive --exclude "artist-report/*" --exclude "user-guide/*" --exclude  "profile-picture/*" --exclude "logo/*" --exclude "fonts/*" --exclude "distributor-logo/*"
+      - aws s3 cp dist s3://${S3_BUCKET} --recursive  --acl public-read
+      - aws cloudfront create-invalidation --distribution-id ${DISTRIBUTION_ID} --paths "/*"
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist

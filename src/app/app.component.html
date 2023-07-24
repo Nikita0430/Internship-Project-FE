@@ -1,0 +1,54 @@
+<div *ngIf="getLoginService().isLoggedIn()">
+    <link rel="stylesheet" href="app.component.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <body>
+        <div class="navbar">
+            <div class="logo">
+                <img routerLink="/calendar" class="logo-img" src="assets/webociti.png" alt="Couldn't load this image">
+            </div>
+            <ul>
+                <li>
+                    <app-notifications></app-notifications>
+                </li>
+                <li>
+                    <a routerLink="/calendar" routerLinkActive="active"><em class="fa fa-calendar"></em> Calendar</a>
+                </li>
+                <li *ngIf="this.getLoginService().isAdmin()">
+                    <a routerLink="/manage-clinic" routerLinkActive="active"><em class="fa fa-regular fa-hospital"></em>
+                        Clinic Management</a>
+                    <a routerLink="/clinic" routerLinkActive="active" style="display: none"></a>
+                    <a routerLink="/view-clinic" routerLinkActive="active" style="display: none"></a>
+                </li>
+                <li>
+                    <a routerLink="/manage-order" routerLinkActive="active"><em class="fa fa-shopping-cart"></em>
+                        Orders</a>
+                    <a routerLink="/place-order" routerLinkActive="active" style="display: none"></a>
+                    <a routerLink="/view-order" routerLinkActive="active" style="display: none"></a>
+                    <a routerLink="/update-order-status" routerLinkActive="active" style="display: none"></a>
+                </li>
+                <li *ngIf="this.getLoginService().isAdmin()">
+                    <a routerLink="/manage-reactor-cycle" routerLinkActive="active"><em class="fa fa-medkit"></em>
+                        Reactor Cycle</a>
+                    <a routerLink="/reactor-cycle" routerLinkActive="active" style="display: none"></a>
+                    <a routerLink="/view-reactor-cycle" routerLinkActive="active" style="display: none"></a>
+                </li>
+                <li *ngIf="!this.getLoginService().isAdmin()">
+                    <a href="mailto:help@example.com">Help</a>
+                </li>
+                <li class="dropdown">
+                    <a class="dropbtn"><em class="fa fa-user"></em> {{ getLoginService().getLoggedInUsername() }}</a>
+                    <div class="dropdown-content">
+                        <a *ngIf="!this.getLoginService().isAdmin()" routerLinkActive="active"
+                            routerLink="/profile">Profile Details</a>
+                        <a href="#" (click)="this.getLoginService().logout()">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </body>
+</div>
+
+<router-outlet></router-outlet>

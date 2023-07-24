@@ -1,0 +1,49 @@
+<div class="back">
+  <a routerLink="/manage-clinic"><em class="fa fa-arrow-left"> </em> Back to Clinic List</a>
+</div>
+
+<div *ngIf="clinicDetails" class="clinic-info">
+  <h1>Clinic Details</h1>
+  <div class="clinic-details">
+    <div class="clinic-detail">
+      <span class="clinic-detail-label">Account ID:</span>
+      <span class="clinic-detail-value">{{ clinicDetails?.account_id }}</span>
+    </div>
+    <div class="clinic-detail">
+      <span class="clinic-detail-label">Name:</span>
+      <span class="clinic-detail-value">{{ clinicDetails?.name }}</span>
+    </div>
+    <div class="clinic-detail">
+      <span class="clinic-detail-label">Address:</span>
+      <span class="clinic-detail-value">{{ clinicDetails?.address }}</span>
+    </div>
+    <div class="clinic-detail">
+      <span class="clinic-detail-label">City:</span>
+      <span class="clinic-detail-value">{{ clinicDetails?.city }}</span>
+    </div>
+    <div class="clinic-detail">
+      <span class="clinic-detail-label">State:</span>
+      <span class="clinic-detail-value">{{ clinicDetails?.state }}</span>
+    </div>
+    <div class="clinic-detail">
+      <span class="clinic-detail-label">Zipcode:</span>
+      <span class="clinic-detail-value">{{ clinicDetails?.zipcode }}</span>
+    </div>
+  </div>
+
+  <div class="btn-container">
+    <input type="submit" (click)="updateClinicDetails()" value="Update">
+    <input type="submit" (click)="deleteClinic()" value="Delete">
+
+
+    <label class="switch">
+      <input type="checkbox" (checked)="clinicDetails?.is_enabled" (click)="enable_disable()">
+      <span class="slider round" [class.enabled]="clinicDetails.is_enabled"></span>
+      <p *ngIf="!clinicDetails.is_enabled">Disabled</p>
+      <p *ngIf="clinicDetails.is_enabled">Enabled</p>
+    </label>
+  </div>
+
+  
+
+</div>
